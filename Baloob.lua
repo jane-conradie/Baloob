@@ -6,6 +6,8 @@ local bopStoppingPoint = 2
 
 local baloobYPosition = 0
 
+local GRAVITY = 50
+
 -- table for Baloob containing its properties
 function Baloob:init()
 
@@ -29,7 +31,6 @@ end
 
 -- this will trigger every frame
 function Baloob:render(dt)
-
     -- adding little bop animation to make baloob feel more alive
     if bopDirection == 'down' then
         if self.y < (baloobYPosition + bopStoppingPoint) then
@@ -47,4 +48,16 @@ function Baloob:render(dt)
 
     -- make baloon bop up and down to give some animation and realism
     love.graphics.draw(self.image, self.x, self.y)
+end
+
+function Baloob:move(direction, dt)
+    if direction == 'down' then
+        self.y = self.y + GRAVITY * dt
+    else
+        self.y = self.y - GRAVITY * dt
+    end
+
+    -- reset y position for baloon bopping
+    baloobYPosition = self.y
+
 end

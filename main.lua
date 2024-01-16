@@ -32,6 +32,7 @@ local GROUND_SCROLL_SPEED = 60
 local BACKGROUND_LOOP_POINT = 413
 
 local baloob = Baloob()
+local groundObject = Ground()
 
 local deltaTime = 0
 
@@ -48,6 +49,9 @@ function love.load()
         vsync = true
     })
 
+    -- seed the RNG
+    math.randomseed(os.time())
+
     -- creating sound table for game
     sounds = {
         ['music'] = love.audio.newSource('assets/sounds/music.mp3', 'static')
@@ -55,7 +59,7 @@ function love.load()
 
     -- set looping of main music to true
     sounds['music']:setLooping(true)
-    sounds['music']:play()
+    -- sounds['music']:play()
 end
 
 function love.update(dt)
@@ -65,7 +69,15 @@ function love.update(dt)
 
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOP_POINT
 
+    -- setting variable so dt can be passed to other classes
     deltaTime = dt
+
+    -- TO DO FIND BETTER WAY OF DOING THIS
+    if love.keyboard.isDown('down') then
+        baloob:move('down', dt)
+    elseif love.keyboard.isDown('up') then
+        baloob:move('up', dt)
+    end
 end
 
 function love.resize(w, h)
@@ -83,6 +95,9 @@ function love.draw()
 
     -- render player 
     baloob:render(deltaTime)
+
+    -- every seconds interval spawn another piece of ground
+    groundObject:render(deltaTime)
 
     push:finish()
 end
