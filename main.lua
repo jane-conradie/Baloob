@@ -5,6 +5,9 @@ Class = require 'class'
 -- import our player Baloob
 require 'Baloob'
 
+-- import ground object
+require 'Ground'
+
 -- dimensions we want
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -45,7 +48,14 @@ function love.load()
         vsync = true
     })
 
-    -- load some game sounds into this
+    -- creating sound table for game
+    sounds = {
+        ['music'] = love.audio.newSource('assets/sounds/music.mp3', 'static')
+    }
+
+    -- set looping of main music to true
+    sounds['music']:setLooping(true)
+    sounds['music']:play()
 end
 
 function love.update(dt)
@@ -71,9 +81,7 @@ function love.draw()
     -- draw ground a bit higher than end of screen
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 14)
 
-    print(deltaTime)
-
-    -- render player
+    -- render player 
     baloob:render(deltaTime)
 
     push:finish()

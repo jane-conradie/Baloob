@@ -1,0 +1,1 @@
+-- object that players can collect for points
