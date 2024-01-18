@@ -78,6 +78,9 @@ function love.update(dt)
     elseif love.keyboard.isDown('up') then
         baloob:move('up', dt)
     end
+
+    -- update ground x positions
+    groundObject:update(dt, baloob)
 end
 
 function love.resize(w, h)

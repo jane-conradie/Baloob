@@ -22,7 +22,7 @@ function Baloob:init()
 
     -- where you want this sprite to spawn, in this case center in screen
     -- take into account image width and height as well
-    self.x = VIRTUAL_WIDTH / 2 - (self.width / 2)
+    self.x = VIRTUAL_WIDTH / 2 - 100
     self.y = VIRTUAL_HEIGHT / 2 - (self.height / 2)
 
     -- store initial baloob's y position
@@ -59,5 +59,4 @@ function Baloob:move(direction, dt)
 
     -- reset y position for baloon bopping
     baloobYPosition = self.y
-
 end
