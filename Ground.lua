@@ -1,5 +1,7 @@
 Ground = Class {}
 
+local collision = false
+
 function Ground:init()
     -- load ground image
     self.image = love.graphics.newImage('assets/scenery/ground.png')
@@ -79,6 +81,15 @@ function Ground:update(dt, player)
     for k, pair in pairs(self.pieces) do
         if pair.x + pair.width < 0 then
             table.remove(self.pieces, k)
+        end
+    end
+
+    -- get collision
+    for k, pair in pairs(self.pieces) do
+        if (player.x + 2) > pair.x and (player.x + 2 + player.width) <= pair.x + pair.width then
+            if (player.y) < pair.y and (player.y + 4 + player.height) >= pair.y + 16 then
+                collision = true
+            end
         end
     end
 end
