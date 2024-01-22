@@ -4,9 +4,10 @@ Class = require 'class'
 
 -- import our player Baloob
 require 'Baloob'
-
 -- import ground object
 require 'Ground'
+-- import bird object
+require 'Bird'
 
 -- a basic StateMachine class which will allow us to transition to and from
 -- game states smoothly and avoid monolithic code in one file
@@ -44,6 +45,7 @@ local BACKGROUND_LOOP_POINT = 413
 
 local baloob = Baloob()
 local groundObject = Ground()
+local bird = Bird()
 
 local deltaTime = 0
 

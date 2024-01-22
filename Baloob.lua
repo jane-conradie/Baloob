@@ -61,11 +61,11 @@ function Baloob:render(dt)
     love.graphics.draw(self.image, self.x, self.y)
 end
 
-function Baloob:collides(piece)
+function Baloob:collides(object)
     -- aabb collision detection
     -- adding extra space for leniency
-    if (self.x + self.width - 4) > piece.x and self.x < piece.x + piece.width then
-        if (self.y + self.height - 4) > piece.y and self.y < piece.y + piece.height then
+    if (self.x + self.width - 4) > object.x and self.x < object.x + object.width then
+        if (self.y + self.height - 4) > object.y and self.y < object.y + object.height then
             return true
         end
     end
