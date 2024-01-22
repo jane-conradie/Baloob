@@ -8,6 +8,17 @@ require 'Baloob'
 -- import ground object
 require 'Ground'
 
+-- a basic StateMachine class which will allow us to transition to and from
+-- game states smoothly and avoid monolithic code in one file
+require 'StateMachine'
+
+-- all states our StateMachine can transition between
+require 'states/BaseState'
+require 'states/CountdownState'
+require 'states/PlayState'
+-- require 'states/ScoreState'
+require 'states/TitleState'
+
 -- dimensions we want
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -36,11 +47,20 @@ local groundObject = Ground()
 
 local deltaTime = 0
 
+local collision = false
+
 function love.load()
     -- setting filter to nearest, nearest to give a retro look
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     love.window.setTitle("Baloob")
+
+    -- initialize our nice-looking retro text fonts
+    smallFont = love.graphics.newFont('assets/fonts/font.ttf', 8)
+    mediumFont = love.graphics.newFont('assets/fonts/flappy.ttf', 14)
+    flappyFont = love.graphics.newFont('assets/fonts/flappy.ttf', 28)
+    hugeFont = love.graphics.newFont('assets/fonts/flappy.ttf', 56)
+    love.graphics.setFont(flappyFont)
 
     -- settings for screen
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -60,6 +80,56 @@ function love.load()
     -- set looping of main music to true
     sounds['music']:setLooping(true)
     -- sounds['music']:play()
+
+    -- initialize state machine with all state-returning functions and set to title
+    gStateMachine = StateMachine {
+        ['title'] = function()
+            return TitleScreenState()
+        end,
+        ['countdown'] = function()
+            return CountdownState()
+        end,
+        ['play'] = function()
+            return PlayState()
+        end,
+        ['score'] = function()
+            return ScoreState()
+        end
+    }
+    gStateMachine:change('title')
+
+    -- initialize input table
+    love.keyboard.keysPressed = {}
+
+    -- intitialize mouse input table
+    love.mouse.buttonsPressed = {}
+end
+
+-- if button was pressed this function will fire
+function love.keypressed(key)
+    -- add key to table of keys pressed this frame
+    love.keyboard.keysPressed[key] = true
+
+    if key == 'escape' then
+        love.event.quit()
+    end
+end
+
+-- if mouse was clicked this function will fire
+function love.mousepressed(x, y, button)
+    love.mouse.buttonsPressed[button] = true
+end
+
+-- bool function to query if a certain key was pressed in frame
+-- will check input table 
+function love.keyboard.wasPressed(key)
+    return love.keyboard.keysPressed[key]
+end
+
+-- bool function to query if mouse was pressed in frame
+-- will check input table 
+function love.mouse.wasPressed(key)
+    return love.mouse.buttonsPressed[key]
 end
 
 function love.update(dt)
@@ -69,18 +139,12 @@ function love.update(dt)
 
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOP_POINT
 
-    -- setting variable so dt can be passed to other classes
-    deltaTime = dt
+    -- this will trigger instead of updating each class
+    gStateMachine:update(dt)
 
-    -- TO DO FIND BETTER WAY OF DOING THIS
-    if love.keyboard.isDown('down') then
-        baloob:move('down', dt)
-    elseif love.keyboard.isDown('up') then
-        baloob:move('up', dt)
-    end
-
-    -- update ground x positions
-    groundObject:update(dt, baloob)
+    -- reset keys pressed for next frame
+    love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.resize(w, h)
@@ -93,14 +157,11 @@ function love.draw()
     -- draw background at top left of screen
     love.graphics.draw(background, -backgroundScroll, 0)
 
+    -- this will happen instead of calling ground and baloob render, will run render of whichever state we are in
+    gStateMachine:render()
+
     -- draw ground a bit higher than end of screen
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 14)
-
-    -- render player 
-    baloob:render(deltaTime)
-
-    -- every seconds interval spawn another piece of ground
-    groundObject:render(deltaTime)
 
     push:finish()
 end

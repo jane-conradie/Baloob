@@ -29,8 +29,18 @@ function Baloob:init()
     baloobYPosition = self.y
 end
 
--- this will trigger every frame
-function Baloob:render(dt)
+function Baloob:update(dt)
+    -- user input for moving baloob up or down
+    if love.keyboard.isDown('down') then
+        self.y = self.y + GRAVITY * dt
+        -- reset y position for baloon bopping
+        baloobYPosition = self.y
+    elseif love.keyboard.isDown('up') then
+        self.y = self.y - GRAVITY * dt
+        -- reset y position for baloon bopping
+        baloobYPosition = self.y
+    end
+
     -- adding little bop animation to make baloob feel more alive
     if bopDirection == 'down' then
         if self.y < (baloobYPosition + bopStoppingPoint) then
@@ -45,18 +55,8 @@ function Baloob:render(dt)
             bopDirection = 'down'
         end
     end
-
-    -- make baloon bop up and down to give some animation and realism
-    love.graphics.draw(self.image, self.x, self.y)
 end
 
-function Baloob:move(direction, dt)
-    if direction == 'down' then
-        self.y = self.y + GRAVITY * dt
-    else
-        self.y = self.y - GRAVITY * dt
-    end
-
-    -- reset y position for baloon bopping
-    baloobYPosition = self.y
+function Baloob:render(dt)
+    love.graphics.draw(self.image, self.x, self.y)
 end
