@@ -63,8 +63,10 @@ end
 
 -- enter play state and scroll background
 function PlayState:enter()
+    scrolling = true
 end
 
 -- exit play state and freeze ground
 function PlayState:exit()
+    scrolling = false
 end

@@ -16,7 +16,7 @@ require 'StateMachine'
 require 'states/BaseState'
 require 'states/CountdownState'
 require 'states/PlayState'
--- require 'states/ScoreState'
+require 'states/ScoreState'
 require 'states/TitleState'
 
 -- dimensions we want

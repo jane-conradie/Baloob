@@ -51,6 +51,7 @@ function Ground:getPiece()
         y = math.floor(math.random(40, VIRTUAL_HEIGHT - 80)),
         x = self.x,
         width = dimensions[3],
+        height = self.height,
         quad = self.quad
     }
 end
