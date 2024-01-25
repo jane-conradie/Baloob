@@ -23,7 +23,6 @@ function Bird:update(dt, birds)
     for k, bird in pairs(birds) do
         if bird.x + self.width < 0 then
             table.remove(birds, k)
-            print('removed bird')
         end
     end
 
@@ -31,10 +30,9 @@ end
 
 function Bird:render(birds)
     for k, bird in pairs(birds) do
+        sounds['bird']:play()
         love.graphics.draw(self.image, bird.x, bird.y, 0, -1, 1, self.width, 0)
-        print('drew bird')
     end
-
 end
 
 function Bird:getBird(player)

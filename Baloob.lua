@@ -6,7 +6,7 @@ local bopStoppingPoint = 2
 
 local baloobYPosition = 0
 
-local GRAVITY = 50
+local GRAVITY = 120
 
 -- table for Baloob containing its properties
 function Baloob:init()

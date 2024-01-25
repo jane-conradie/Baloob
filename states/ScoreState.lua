@@ -2,16 +2,13 @@ ScoreState = Class {
     __includes = BaseState
 }
 
--- display user score
--- tell them hit enter to play again
--- go back to countdown state
-
 function ScoreState:enter(params)
     self.score = params.score
 end
 
 function ScoreState:update(dt)
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+        sounds['start']:play()
         gStateMachine:change('countdown')
     end
 end

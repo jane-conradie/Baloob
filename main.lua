@@ -8,6 +8,7 @@ require 'Baloob'
 require 'Ground'
 -- import bird object
 require 'Bird'
+require 'Ducky'
 
 -- a basic StateMachine class which will allow us to transition to and from
 -- game states smoothly and avoid monolithic code in one file
@@ -37,8 +38,8 @@ local ground = love.graphics.newImage('assets/scenery/ground.png')
 local groundScroll = 0
 
 -- speeds at which to scroll each scenery item
-local BACKGROUND_SCROLL_SPEED = 30
-local GROUND_SCROLL_SPEED = 60
+local BACKGROUND_SCROLL_SPEED = 60
+local GROUND_SCROLL_SPEED = 90
 
 -- point at which to return each item back to 0 once it reaches this
 local BACKGROUND_LOOP_POINT = 413
@@ -76,12 +77,17 @@ function love.load()
 
     -- creating sound table for game
     sounds = {
-        ['music'] = love.audio.newSource('assets/sounds/music.mp3', 'static')
+        ['music'] = love.audio.newSource('assets/sounds/music.mp3', 'static'),
+        ['start'] = love.audio.newSource('assets/sounds/start.wav', 'static'),
+        ['go'] = love.audio.newSource('assets/sounds/go.wav', 'static'),
+        ['pop'] = love.audio.newSource('assets/sounds/pop.wav', 'static'),
+        ['pickup'] = love.audio.newSource('assets/sounds/pickup.wav', 'static'),
+        ['bird'] = love.audio.newSource('assets/sounds/bird.wav', 'static')
     }
 
     -- set looping of main music to true
     sounds['music']:setLooping(true)
-    -- sounds['music']:play()
+    sounds['music']:play()
 
     -- initialize state machine with all state-returning functions and set to title
     gStateMachine = StateMachine {

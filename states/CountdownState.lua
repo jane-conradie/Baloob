@@ -17,8 +17,12 @@ function CountdownState:update(dt)
         -- set count one less until 0
         if self.count > 0 then
             self.count = self.count - 1
+
+            sounds['start']:play()
         elseif self.count == 0 then
             -- switch to play state
+            sounds['go']:play()
+
             gStateMachine:change('play')
         end
 

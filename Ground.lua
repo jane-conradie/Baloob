@@ -8,7 +8,7 @@ function Ground:init()
 
     self.height = self.image:getHeight()
 
-    self.x = 200
+    self.x = VIRTUAL_WIDTH
     self.y = 0
 
     self.quad = 0
@@ -16,7 +16,7 @@ function Ground:init()
     self.horizontalGap = 40
     self.verticalGap = 60
 
-    self.speed = 40
+    self.speed = 120
 end
 
 function Ground:render(pieces)
@@ -26,14 +26,9 @@ function Ground:render(pieces)
     -- using new quad function to randomise length of ground pieces
     self.quad = love.graphics.newQuad(0, 0, math.floor(math.random(30, 150)), self.height, self.image)
 
-    -- check previous ground to find x position
     for k, pair in pairs(pieces) do
-        -- check if previous pair is 0 which means this is the first ground item so spawn after half of screen
-        if not pair.x then
-            self.x = VIRTUAL_WIDTH / 2 + math.floor(math.random(1, 10))
-        else
-            self.x = pair.x + pair.width + self.horizontalGap + math.floor(math.random(1, 10))
-        end
+        -- check previous ground to find x position
+        self.x = pair.x + pair.width + self.horizontalGap + math.floor(math.random(1, 10))
     end
 
     -- loop through table to spawn new piece
@@ -67,7 +62,6 @@ function Ground:update(dt, pieces)
     for k, pair in pairs(pieces) do
         if pair.x + pair.width < 0 then
             table.remove(pieces, k)
-            print('removed')
         end
     end
 end
